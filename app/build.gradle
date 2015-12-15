@@ -20,6 +20,5 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile files('libs/androidautowire.jar')
     compile "com.android.support:support-v4:22.1.1"
 }
