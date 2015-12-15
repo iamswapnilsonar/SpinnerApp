@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.cardinalsolutions.progressindicator.wheel_indicator;
+package com.cuelogic.android;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -26,8 +26,6 @@ import android.graphics.RectF;
 import android.support.v4.view.animation.PathInterpolatorCompat;
 import android.util.AttributeSet;
 import android.view.View;
-
-import com.cardinalsolutions.progressindicator.R;
 
 import java.util.ArrayList;
 import java.util.List;

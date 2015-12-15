@@ -5,7 +5,7 @@ android {
     buildToolsVersion "20.0.0"
 
     defaultConfig {
-        applicationId "com.cardinalsolutions.progressindicator"
+        applicationId "com.cuelogic.android"
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 1

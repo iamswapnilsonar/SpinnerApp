@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.cardinalsolutions.progressindicator.wheel_indicator;
+package com.cuelogic.android;
 
 /**
  * Created by david on 23/5/15.
