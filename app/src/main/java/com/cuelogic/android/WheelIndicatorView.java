@@ -22,9 +22,11 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.support.v4.view.animation.PathInterpolatorCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -83,6 +85,10 @@ public class WheelIndicatorView extends View {
         this.wheelIndicatorItems = wheelIndicatorItems;
         recalculateItemsAngles();
         invalidate();
+    }
+
+    public List<WheelIndicatorItem> getWheelIndicatorItems() {
+        return this.wheelIndicatorItems;
     }
 
     public void setFilledPercent(int filledPercent) {
@@ -217,20 +223,20 @@ public class WheelIndicatorView extends View {
             canvas.drawCircle(wheelBoundsRectF.centerX(), wheelBoundsRectF.centerY(),
                     wheelBoundsRectF.width() / 2 - itemsLineWidth, circleBackgroundPaint);
         canvas.drawArc(wheelBoundsRectF, ANGLE_INIT_OFFSET, 360, false, innerBackgroundCirclePaint);
-        drawIndicatorItems(canvas);
+        drawIndicatorItems("First", canvas);
 
 //        itemArcPaint.setColor(Color.parseColor("#FF9000"));
 //        canvas.drawArc((float)wheelBoundsRectF.centerX(), wheelBoundsRectF.centerY(),
 //                wheelBoundsRectF.width() / 2 - itemsLineWidth,false, itemArcPaint);
         drawIndicatorArc(canvas);
-        drawIndicatorItems(canvas);
+        drawIndicatorItems("Second", canvas);
 
     }
 
-    private void drawIndicatorItems(Canvas canvas) {
+    private void drawIndicatorItems(String tag, Canvas canvas) {
         if (wheelIndicatorItems.size() > 0) {
             for (int i = wheelIndicatorItems.size() - 1; i >= 0; i--) { // Iterate backward to overlap larger items
-                draw(wheelIndicatorItems.get(i), wheelBoundsRectF, wheelItemsAngles.get(i), canvas);
+                draw(tag, wheelIndicatorItems.get(i), wheelBoundsRectF, wheelItemsAngles.get(i), canvas);
             }
         }
     }
@@ -245,20 +251,43 @@ public class WheelIndicatorView extends View {
         }
     }
 
-    private void draw(WheelIndicatorItem indicatorItem, RectF surfaceRectF, float angle, Canvas canvas) {
+    private void draw(String tag, WheelIndicatorItem indicatorItem, RectF surfaceRectF, float angle, Canvas canvas) {
 //        itemArcPaint.setColor(Color.parseColor("#FF9000"));
         itemEndPointsPaint.setColor(indicatorItem.getColor());
 
         // Draw arc
 //        canvas.drawArc(surfaceRectF, ANGLE_INIT_OFFSET, angle, false, itemArcPaint);
+
+        float cxTop = minDistViewSize / 2;
+        float cyTop = 0 + itemsLineWidth;
+
         // Draw top circle
-        canvas.drawCircle(minDistViewSize / 2, 0 + itemsLineWidth, itemsLineWidth, itemEndPointsPaint);
+//        canvas.drawCircle(cxTop, cyTop, itemsLineWidth, itemEndPointsPaint);
+//        Log.v(tag, "cxTop: "+cxTop + " cyTop: "+cyTop);
+
         int topPosition = minDistViewSize / 2 - itemsLineWidth;
+
+        float cxEnd = (float) (Math.cos(Math.toRadians(angle + ANGLE_INIT_OFFSET)) *
+                topPosition + topPosition + itemsLineWidth);
+        float cyEnd = (float) (Math.sin(Math.toRadians((angle + ANGLE_INIT_OFFSET))) *
+                topPosition + topPosition + itemsLineWidth);
+
         // Draw end circle
-        canvas.drawCircle(
-                (float) (Math.cos(Math.toRadians(angle + ANGLE_INIT_OFFSET)) * topPosition + topPosition + itemsLineWidth),
-                (float) (Math.sin(Math.toRadians((angle + ANGLE_INIT_OFFSET))) * topPosition + topPosition + itemsLineWidth),
-                itemsLineWidth, itemEndPointsPaint);
+        canvas.drawCircle(cxEnd, cyEnd, itemsLineWidth, itemEndPointsPaint);
+        Log.v(tag, "cxEnd: " + cxEnd + " cyEnd: " + cyEnd);
+
+        int leftRect = (int) cxEnd - itemsLineWidth;
+        int topRect = (int) cyEnd - itemsLineWidth;
+        int rightRect = (int) cxEnd + itemsLineWidth;
+        int bottomRect = (int) cyEnd + itemsLineWidth;
+
+//        if(null == indicatorItem.getRect()) {
+//
+//        }
+
+        Rect rect = new Rect(leftRect, topRect, rightRect, bottomRect);
+        indicatorItem.setRect(rect);
+
     }
 
     private void drawOnlyArc(WheelIndicatorItem indicatorItem, RectF surfaceRectF, float angle,

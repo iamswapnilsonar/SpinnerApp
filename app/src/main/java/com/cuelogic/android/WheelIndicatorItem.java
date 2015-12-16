@@ -15,6 +15,8 @@
  */
 package com.cuelogic.android;
 
+import android.graphics.Rect;
+
 /**
  * Created by david on 23/5/15.
  */
@@ -22,17 +24,22 @@ public class WheelIndicatorItem {
 
     private float weight;
     private int color;
+    private int value;
+
+    private Rect rect;
 
     public WheelIndicatorItem() {
         weight = 0;
+        value = 0;
     }
 
-    public WheelIndicatorItem(float weight, int color) {
+    public WheelIndicatorItem(float weight, int color, int value) {
         if (weight < 0)
             throw new IllegalArgumentException("weight value should be positive");
 
         this.weight = weight;
         this.color = color;
+        this.value = value;
     }
 
     public void setWeight(float weight) {
@@ -40,6 +47,22 @@ public class WheelIndicatorItem {
             throw new IllegalArgumentException("weight value should be positive");
 
         this.weight = weight;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    public Rect getRect() {
+        return rect;
+    }
+
+    public void setRect(Rect rect) {
+        this.rect = rect;
     }
 
     public float getWeight() {
